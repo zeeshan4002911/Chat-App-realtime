@@ -1,0 +1,32 @@
+#main {
+    display: grid;
+    grid-template-columns: 30vw 70vw;
+}
+
+#landing {
+    background-color: red;
+    width: 30vw;
+    height: 100vh;
+}
+
+#chat {
+    background-color: blue;
+    width: 70vw;
+    height: 100vh;
+}
+
+.click {
+    display: none;
+}
+
+@media only screen and (max-width: 500px) {
+    #landing {
+        width: 100vw;
+    }
+    #chat {
+        width: 100vw;
+    }
+    .click {
+        display: block;
+    }
+}
