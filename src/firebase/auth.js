@@ -1,7 +1,7 @@
 import { signInWithPopup, signOut, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 const provider = new GoogleAuthProvider();
 
-const signIn = async (auth, type, email, password) => {
+const signIn = async (auth, type, email = undefined, password = undefined) => {
     if (type === "GOOGLE") {
         return await signInWithPopup(auth, provider)
             .then((result) => {
@@ -56,11 +56,30 @@ const signUp = async (auth, email, password) => {
         });
 }
 
-const logOut = (auth) => {
-    signOut(auth).then(() => {
-        // Sign-out successful.
+const logOut = async (auth) => {
+    return await signOut(auth).then(() => {
+        // Sign-out successful.      
     }).catch((error) => {
         // An error happened.
+        console.log("ERROR 4", error);
     });
 }
 export { signIn, logOut, signUp }
+
+
+// pending
+
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+// const auth = getAuth();
+// onAuthStateChanged(auth, (user) => {
+//   if (user) {
+//     // User is signed in, see docs for a list of available properties
+//     // https://firebase.google.com/docs/reference/js/firebase.User
+//     const uid = user.uid;
+//     // ...
+//   } else {
+//     // User is signed out
+//     // ...
+//   }
+// });
