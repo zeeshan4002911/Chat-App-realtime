@@ -71,6 +71,7 @@ export default function Landing() {
                         <TextField variant="outlined" label="Password" name="password" onKeyUp={(e) => handleInput(e)}></TextField>
                         <Button variant="contained" onClick={() => handleLogin("EMAIL/PASSWORD", userInput.email, userInput.password)} >Login</Button>
                         <Button variant="outlined" onClick={() => setIsLoginClick(true)}>Sign up</Button>
+                        <LoginButton onClick={() => handleLogin("GOOGLE")}>Login using Goo< GoogleIcon />le</LoginButton>
                     </Container>
                     :
                     <Container>
@@ -79,9 +80,9 @@ export default function Landing() {
                         <TextField variant="outlined" label="Confirm Password" name="confirm_password" onKeyUp={(e) => handleInput(e)}></TextField>
                         <Button variant="contained" onClick={handleSignUp}>Sign Up</Button>
                         <Button variant="outlined" onClick={() => setIsLoginClick(false)}>Login</Button>
+                        <LoginButton onClick={() => handleLogin("GOOGLE")}>Sign Up using Goo< GoogleIcon />le</LoginButton>
                     </Container>
                 }
-                <LoginButton onClick={() => handleLogin("GOOGLE")}>Login using Goo< GoogleIcon />le</LoginButton>
             </Main>
         </div>
     )
