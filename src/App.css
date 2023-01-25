@@ -3,7 +3,7 @@
     grid-template-columns: 30vw 70vw;
 }
 
-#landing {
+#home {
     background-color: red;
     width: 30vw;
     height: 100vh;
@@ -20,7 +20,7 @@
 }
 
 @media only screen and (max-width: 500px) {
-    #landing {
+    #home {
         width: 100vw;
     }
     #chat {

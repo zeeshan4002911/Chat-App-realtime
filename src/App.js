@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Landing from "./pages/Landing";
+import Home from "./pages/Home";
 import Chat from "./pages/Chat";
+import Landing from "./pages/Landing";
 import Error from "./pages/Error";
 
 const App = () => {
@@ -13,17 +14,18 @@ const App = () => {
         <div id="main">
             <BrowserRouter>
                 <Routes>
+                    <Route index element={<Landing />} />
                     { (width >= 500) ?
-                    <Route index element={
+                    <Route path="/home" element={
                         <>
-                            <Landing />
+                            <Home />
                             <Chat />
                         </>
                     } />
                     :
                     <>
-                    <Route index element={<Landing />} />
-                    <Route index path="/chat" element={<Chat />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/chat" element={<Chat />} />
                     </>
                     }
                     <Route path="*" element={<Error />}/>
