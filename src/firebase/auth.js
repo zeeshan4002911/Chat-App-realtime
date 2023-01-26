@@ -1,8 +1,9 @@
 import { signInWithPopup, signOut, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-const provider = new GoogleAuthProvider();
+import { writeUserData } from "./IO";
 
 const signIn = async (auth, type, email = undefined, password = undefined) => {
     if (type === "GOOGLE") {
+        const provider = new GoogleAuthProvider(auth);
         return await signInWithPopup(auth, provider)
             .then((result) => {
                 // This gives you a Google Access Token. You can use it to access the Google API.
@@ -18,7 +19,7 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // The email of the user's account used.
-                const email = error.customData.email;
+                const email = error?.customData?.email;
                 // The AuthCredential type that was used.
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 // ...
@@ -58,7 +59,9 @@ const signUp = async (auth, email, password) => {
 
 const logOut = async (auth) => {
     return await signOut(auth).then(() => {
-        // Sign-out successful.      
+        // Sign-out successful.
+        auth.signOut();
+        console.log(auth)    
     }).catch((error) => {
         // An error happened.
         console.log("ERROR 4", error);
