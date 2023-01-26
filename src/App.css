@@ -4,13 +4,13 @@
 }
 
 #home {
-    background-color: red;
+    background-color: rgb(225, 143, 143);
     width: 30vw;
     height: 100vh;
 }
 
 #chat {
-    background-color: blue;
+    background-color: rgb(119, 119, 179);
     width: 70vw;
     height: 100vh;
 }
