@@ -13,6 +13,7 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 const user = result.user;
                 // ...
                 console.log("Google tokken:", token);
+                writeUserData(user.auth);
                 return user;
             }).catch((error) => {
                 // Handle Errors here.
@@ -31,6 +32,7 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 // Signed in 
                 const user = userCredential.user;
                 // ...
+                writeUserData(user.auth);
                 return user;
             })
             .catch((error) => {
