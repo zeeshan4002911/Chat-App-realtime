@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { signIn, signUp } from "../firebase/auth";
+import { signIn, signUp, logOut } from "../firebase/auth";
 import { auth } from "../firebase/config";
 import { Box, Button, styled, Typography, TextField } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -42,22 +42,26 @@ export default function Landing() {
     }
 
     const handleLogin = async (type, email, password) => {
+        console.log(auth);
+        if (auth.currentUser === null) {
         const user = await signIn(auth, type, email, password);
-        if (!user) return console.log("Unable to connect with firebase", user);
+        if (!user) return alert("Unable to connect with firebase");
         console.log("user", user);
-        navigate("/home", { replace: true })
+        }
+        navigate("/home");
     }
 
     const handleSignUp = async () => {
         const email = userInput.email.toLowerCase();
         if (userInput.password !== userInput.confirm_password) {
-            return console.log("Password are not same")
+            return alert("Password are not same")
         }
         const password = userInput.password;
         const user = await signUp(auth, email, password);
-        if (!user) return console.log("Unable to connect with firebase", user);
+        if (!user) return alert("Unable to connect with firebase");
         console.log("user registered", user);
-        navigate("/home", { replace: true })
+        await logOut(auth);
+        setIsLoginClick(false);
     }
 
     return (
