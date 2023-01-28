@@ -5,9 +5,11 @@ import { Box, styled, IconButton, TextField, Typography, Container, Button } fro
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import SupervisedUserCircleRoundedIcon from '@mui/icons-material/SupervisedUserCircleRounded';
 import SearchIcon from '@mui/icons-material/Search';
-import { readFriendData, readUserData } from "../firebase/IO";
+import { readFriendData, readUserData, writeFriendData } from "../firebase/IO";
 import HomeCard from "../components/HomeCard";
 import { auth } from "../firebase/config";
+import { toast } from 'react-toastify';
+import PopUp from "../components/PopUp";
 
 
 export default function Home() {
@@ -15,22 +17,25 @@ export default function Home() {
     const [userList, setUserList] = useState([]);
     const [friendList, setFriendList] = useState([]);
     const [clickedAddFriend, setClickedAddFriend] = useState(false);
+    const [userInput, setUserInput] = useState("");
 
     useEffect(() => {
         (() => {
+            // To Avoid getting auth as null on reload
             auth.onAuthStateChanged(async (user) => {
                 const users = await readFriendData(user.auth);
                 setFriendList(users);
             })
         })();
         if (userList.length === 0 && clickedAddFriend) {
+
+            // Will Only Run Once on clicking the bottom people button
             (async () => {
-                console.log("fetch user data trigger")
                 const user_data = await readUserData();
                 setUserList(user_data);
             })();
         }
-    }, [clickedAddFriend])
+    }, [clickedAddFriend, userList])
 
     useEffect(() => {
         window.onresize = () => {
@@ -39,13 +44,35 @@ export default function Home() {
     }, [navigate])
 
     const handleAddFriend = () => {
-        console.log("clicked");
+        const input = document.getElementById("friend-search").value;
+        setUserInput("");
+        if (!input) return;
+        if (!input.match(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/)) return toast.info("Not a Valid Email");
+        const search_email = input.toLowerCase();
+        let match = false;
+        let match_user = null;
+        userList.forEach(obj => {
+            if (obj.value.email === search_email) {
+                match = true;
+                match_user = obj.value;
+                return;
+            }
+        })
+        if (!match) return toast.error(`User with ${search_email} doesn't exists`);
+        (async () => {
+            // Need to implement logic here for two way handshake friend request/accept feature
 
-        // TODO
+            const response = await writeFriendData(auth, match_user);
+            const response2 = await writeFriendData(match_user, auth); 
+            if (response === "exists") return toast.info(`${match_user.email} is already your friend`);
+            else if (response === "success") { setClickedAddFriend(false); toast.success(`${match_user.email} is now your friend`) }
+            else return toast.error(`Unable to connect ${response}`);
+        })();
     }
 
     return (
         <div id="home">
+            <PopUp />
             <Box style={{ borderBottom: "1px solid gray", position: "sticky", top: 0 }}>
                 <Header>
                     <IconButton className="click" variant="contained" size="small" onClick={() => navigate("/")}>
@@ -70,7 +97,7 @@ export default function Home() {
                         :
                         <FriendSearch>
                             <Typography variant="h6">Connect with your friend 😺</Typography>
-                            <TextField label="Firend's Email" />
+                            <TextField label="Friend's Email" id="friend-search" value={userInput} onChange={(e) => setUserInput(e.target.value)} />
                             <Button variant="contained" onClick={handleAddFriend}>Connect</Button>
                         </FriendSearch>
                 }

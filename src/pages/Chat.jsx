@@ -5,19 +5,12 @@ import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import { writeFriendData } from "../firebase/IO";
 import { auth } from "../firebase/config";
 
-const Header = styled(Box)`
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid black;
-    padding: 1rem 0;
-    gap: 0.5rem;
-`;
 
 const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const data = location?.state?.friend_data;
-
+    console.log(data)
     useEffect(() => {
         window.onresize = () => {
             window.location.reload();
@@ -33,7 +26,7 @@ const Chat = () => {
                             <ArrowBackIosRoundedIcon />
                         </IconButton>
                         <Avatar alt={data?.name} src={data?.profile_picture} referrerPolicy="no-referrer" />
-                        <Typography>{data?.name}</Typography>
+                        <Typography>{data?.name || "Unknown"} </Typography>
                     </Header>
                 </>
             }
@@ -42,3 +35,11 @@ const Chat = () => {
 }
 
 export default Chat;
+
+const Header = styled(Box)`
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    padding: 1rem 0;
+    gap: 0.5rem;
+`;
