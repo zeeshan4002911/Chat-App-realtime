@@ -48,14 +48,15 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
     }
 }
 
-const signUp = async (auth, email, password) => {
+const signUp = async (auth, email, password, name) => {
 
     // FOR EMAIL/PASWORD REGISTRATION
     return await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
+            let user = userCredential.user;
             // ...
+            user.auth.displayName = name; // Testing pending
             writeUserData(user.auth);
             return user;
         })

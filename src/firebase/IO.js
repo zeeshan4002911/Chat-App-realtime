@@ -40,15 +40,17 @@ async function writeFriendData(auth, friend_data) {
           return;
         }
       })
-      if (friend_exists) return console.log("friend exists");
+      if (friend_exists) return ("exists");
 
       data_array.push(friend_data);
       await set(ref(db, `/friends/${auth.currentUser.uid}/`), data_array);
+      return "success";
     } else {
       await set(ref(db, `/friends/${auth.currentUser.uid}/`), [friend_data]);
     }
   }).catch((error) => {
     console.error(error);
+    return error;
   });
 }
 
