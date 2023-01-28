@@ -1,8 +1,11 @@
 import { signInWithPopup, signOut, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { writeUserData } from "./IO";
 
+// FOR LOGIN:
 const signIn = async (auth, type, email = undefined, password = undefined) => {
-    if (type === "GOOGLE") {
+    if (type === "GOOGLE_LOGIN" || type === "GOOGLE_SIGNUP") {
+
+        // FOR GOOGLE LOGIN/REGISTRATION
         const provider = new GoogleAuthProvider(auth);
         return await signInWithPopup(auth, provider)
             .then((result) => {
@@ -27,6 +30,8 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 console.log("ERROR 1", errorCode, errorMessage, email, credential);
             });
     } else if (type === "EMAIL/PASSWORD") {
+
+        // FOR EMAIL/PASSWORD LOGIN:
         return await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in 
@@ -44,11 +49,14 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
 }
 
 const signUp = async (auth, email, password) => {
+
+    // FOR EMAIL/PASWORD REGISTRATION
     return await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
             // ...
+            writeUserData(user.auth);
             return user;
         })
         .catch((error) => {
@@ -59,32 +67,15 @@ const signUp = async (auth, email, password) => {
         });
 }
 
+// FOR LOGOUT
 const logOut = async (auth) => {
     return await signOut(auth).then(() => {
         // Sign-out successful.
         auth.signOut();
-        console.log(auth)    
+        console.log(auth)
     }).catch((error) => {
         // An error happened.
         console.log("ERROR 4", error);
     });
 }
 export { signIn, logOut, signUp }
-
-
-// pending
-
-// import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-// const auth = getAuth();
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     // User is signed in, see docs for a list of available properties
-//     // https://firebase.google.com/docs/reference/js/firebase.User
-//     const uid = user.uid;
-//     // ...
-//   } else {
-//     // User is signed out
-//     // ...
-//   }
-// });
