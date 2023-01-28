@@ -1,17 +1,19 @@
 #main {
     display: grid;
     grid-template-columns: 30vw 70vw;
+    background: linear-gradient(white, #ffa8a8, #ff8db7);
 }
 
 #home {
-    background: linear-gradient(white, #ffcad3, #ef7575);
+    background: linear-gradient(white, #ffa8a8, #ff8db7);
     width: 30vw;
     height: 100vh;
     position: relative;
+    border-right: 1px solid gray;
 }
 
 #chat {
-    background: linear-gradient(white, #ffa8a8, #ff76a9);
+    background: linear-gradient(white, #ffa8a8, #ff8db7);
     width: 70vw;
     height: 100vh;
 }
