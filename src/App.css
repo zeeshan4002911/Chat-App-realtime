@@ -4,13 +4,14 @@
 }
 
 #home {
-    background-color: rgb(225, 143, 143);
+    background: linear-gradient(white, #ffcad3, #ef7575);
     width: 30vw;
     height: 100vh;
+    position: relative;
 }
 
 #chat {
-    background-color: rgb(119, 119, 179);
+    background: linear-gradient(white, #ffa8a8, #ff76a9);
     width: 70vw;
     height: 100vh;
 }
