@@ -17,6 +17,8 @@
     width: 70vw;
     height: 100vh;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .click {
