@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { writeMessageData } from "../firebase/IO";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase/config";
@@ -16,38 +16,31 @@ const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const data = location?.state?.friend_data;
-    const allMessages = useRef([]);
     const [fetchedMessages, setFetchedMessages] = useState([]);
 
-    
+
     useEffect(() => {
         window.onresize = () => {
             const width = window.innerWidth || document.documentElement.clientWidth || document.body.innerWidth;
-            if (width >= 500 ) window.location.reload();
+            if (width >= 500) window.location.reload();
         }
     }, [navigate]);
-    
-    useEffect(() => {
-        setFetchedMessages(allMessages.current);
-    }, [allMessages.current]);
 
     useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            const user_uid = user.auth.currentUser.uid;
-            const friend_uid = data.uid;
-            const db = database;
-            const room_id = (user_uid > friend_uid) ? `${user_uid}&${friend_uid}` : `${friend_uid}&${user_uid}`;
-            const room_ref = ref(db, 'rooms/' + room_id);
-            onValue(room_ref, (snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    if (!data) return;
-                    allMessages.current = data;
-                }
-            });
-        })
-    });
-    
+        const user_uid = window.localStorage.getItem("chat_uid");
+        const friend_uid = data?.uid;
+        const db = database;
+        const room_id = (user_uid > friend_uid) ? `${user_uid}&${friend_uid}` : `${friend_uid}&${user_uid}`;
+        const room_ref = ref(db, 'rooms/' + room_id);
+        return onValue(room_ref, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                if (!data) return;
+                setFetchedMessages(data);
+            }
+        });
+    }, [data?.uid]);
+
 
     const handleMessageSent = async () => {
         const message_input = document.getElementById("typing").value;

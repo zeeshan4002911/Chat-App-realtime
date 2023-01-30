@@ -24,6 +24,7 @@ export default function Home() {
             // To Avoid getting auth as null on reload
             auth.onAuthStateChanged(async (user) => {
                 if (!user) return;
+                window.localStorage.setItem("chat_uid", user.auth.currentUser.uid);
                 const users = await readFriendData(user.auth);
                 setFriendList(users);
             })
