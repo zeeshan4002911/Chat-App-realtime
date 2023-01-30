@@ -115,7 +115,7 @@ export default function Home() {
                 }
                 {friendList.length === 0 && !clickedAddFriend ? <Empty>Nothing's Here</Empty> : <></>}
             </Box>
-            <IconButton style={{ position: "absolute", bottom: "1rem", right: "1rem", zIndex: 1 }} onClick={() => setClickedAddFriend(!clickedAddFriend)}>
+            <IconButton style={{ position: "absolute", bottom: "3rem", right: "1rem", zIndex: 1 }} onClick={() => setClickedAddFriend(!clickedAddFriend)}>
                 <SupervisedUserCircleRoundedIcon fontSize="large" style={{ color: "black" }} />
             </IconButton>
         </div>
