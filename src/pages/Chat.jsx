@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { writeMessageData } from "../firebase/IO";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase/config";
@@ -10,12 +10,15 @@ import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { toast } from "react-toastify";
 import PopUp from "../components/PopUp";
+import ChatCard from "../components/ChatCard";
 
 
 const Chat = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const messagesEndRef = useRef(null);
     const data = location?.state?.friend_data;
+    const user_uid = window.localStorage.getItem("chat_uid");
     const [fetchedMessages, setFetchedMessages] = useState([]);
 
 
@@ -27,7 +30,6 @@ const Chat = () => {
     }, [navigate]);
 
     useEffect(() => {
-        const user_uid = window.localStorage.getItem("chat_uid");
         const friend_uid = data?.uid;
         const db = database;
         const room_id = (user_uid > friend_uid) ? `${user_uid}&${friend_uid}` : `${friend_uid}&${user_uid}`;
@@ -37,9 +39,10 @@ const Chat = () => {
                 const data = snapshot.val();
                 if (!data) return;
                 setFetchedMessages(data);
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
             }
         });
-    }, [data?.uid]);
+    }, [data?.uid, user_uid]);
 
 
     const handleMessageSent = async () => {
@@ -76,14 +79,14 @@ const Chat = () => {
                         <Avatar alt={data?.name} src={data?.profile_picture} referrerPolicy="no-referrer" />
                         <Typography>{data?.name || "Unknown"} </Typography>
                     </Header>
-                    <main>
-                        <h1> </h1>
+                    <Main>
                         {
                             fetchedMessages.map((msg_obj) => (
-                                <div key={msg_obj.time}>{msg_obj.content}</div>
+                                <ChatCard key={msg_obj.time} data={msg_obj} user_uid={user_uid} />
                             ))
                         }
-                    </main>
+                        <div ref={messagesEndRef} > </div>
+                    </Main>
                     <Footer>
                         <Button><AddCircleRoundedIcon style={{ color: "#fff" }} fontSize="large" /></Button>
                         <OutlinedInput name="typing" type="text" id="typing" placeholder="Message" />
@@ -103,14 +106,10 @@ const Header = styled(Box)`
     border-bottom: 1px solid black;
     padding: 1rem 0;
     gap: 0.5rem;
-    position: absolute;
-    top: 0;
     width: 100%;
 `;
 
 const Footer = styled(Box)`
-    position: absolute;
-    bottom: 0;
     padding: .5rem;
     width: 100%;
     display: grid;
@@ -123,3 +122,11 @@ const Footer = styled(Box)`
         border-radius: 50px;
     }
 `;
+
+const Main = styled(Box)`
+    padding: 0.5rem 1rem;
+    height: 80%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+`
