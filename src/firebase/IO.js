@@ -71,10 +71,21 @@ async function readFriendData(auth) {
   });
 }
 
+async function writeMessageData(user_uid, friend_uid, new_mesage) {
+  const room_id = (user_uid > friend_uid) ? `${user_uid}&${friend_uid}` : `${friend_uid}&${user_uid}`;
+  return await get(child(ref(db), `rooms/${room_id}`)).then(async (snapshot) => {
+    if (snapshot.exists()) {
+      let message_array = snapshot.val();
+      message_array.push(new_mesage);
+      await set(ref(db, `rooms/${room_id}/`), message_array);
+    } else {
+      await set(ref(db, `rooms/${room_id}/`), [new_mesage]);
+    }
+    return "success";
+  }).catch((error) => {
+    console.error(error);
+    return error;
+  });
+}
 
-export { writeUserData, readUserData, deleteUserData, writeFriendData, readFriendData }
-
-// pending #rooms logic
-// const uid = auth.currentUser.uid;
-// const friend_uid = friend_auth.currentUser.uid;
-// const id = (uid > friend_uid) ? `${uid}${friend_uid}` : `${friend_uid}${uid}`;
+export { writeUserData, readUserData, deleteUserData, writeFriendData, readFriendData, writeMessageData };
