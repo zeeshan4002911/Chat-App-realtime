@@ -29,8 +29,12 @@ async function readUserData() {
   });
 }
 
-async function writeFriendData(auth, friend_data) {
-  return await get(child(ref(db), `/friends/${auth.currentUser.uid}`)).then(async (snapshot) => {
+async function deleteUserData(auth) {
+  return await set(ref(db, 'users/' + auth.currentUser?.uid), null);
+}
+
+async function writeFriendData(currentUser, friend_data) {
+  return await get(child(ref(db), `/friends/${currentUser.uid}`)).then(async (snapshot) => {
     if (snapshot.exists()) {
       let data_array = snapshot.val();
       let friend_exists = false;
@@ -43,11 +47,11 @@ async function writeFriendData(auth, friend_data) {
       if (friend_exists) return ("exists");
 
       data_array.push(friend_data);
-      await set(ref(db, `/friends/${auth.currentUser.uid}/`), data_array);
-      return "success";
+      await set(ref(db, `/friends/${currentUser.uid}/`), data_array);
     } else {
-      await set(ref(db, `/friends/${auth.currentUser.uid}/`), [friend_data]);
+      await set(ref(db, `/friends/${currentUser.uid}/`), [friend_data]);
     }
+    return "success";
   }).catch((error) => {
     console.error(error);
     return error;
@@ -68,7 +72,7 @@ async function readFriendData(auth) {
 }
 
 
-export { writeUserData, readUserData, writeFriendData, readFriendData }
+export { writeUserData, readUserData, deleteUserData, writeFriendData, readFriendData }
 
 // pending #rooms logic
 // const uid = auth.currentUser.uid;

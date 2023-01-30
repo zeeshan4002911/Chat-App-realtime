@@ -3,21 +3,6 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import { useNavigate } from "react-router-dom";
 
-const Card = styled(Box)`
-    display: flex;
-    gap: 1rem;
-    border-bottom: 1px solid gray;
-    width: 100%;    
-    padding: 1rem;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-`
-const Verified = styled(Typography)`
-    position: absolute;
-    right: 1rem;
-    top: 1rem
-`
 
 const HomeCard = ({ data }) => {
     const navigate = useNavigate();
@@ -40,3 +25,19 @@ const HomeCard = ({ data }) => {
 }
 
 export default HomeCard;
+
+const Card = styled(Box)`
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid gray;
+    width: 100%;    
+    padding: 1rem;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+`;
+const Verified = styled(Typography)`
+    position: absolute;
+    right: 1rem;
+    top: 1rem
+`;

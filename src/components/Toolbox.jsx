@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { logOut } from "../firebase/auth";
+import { logOut, deleteAccount } from "../firebase/auth";
+import { deleteUserData } from "../firebase/IO";
 import { auth } from "../firebase/config";
 import { Avatar, Menu, MenuItem, IconButton } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { toast } from "react-toastify";
 
 
 const Toolbox = () => {
@@ -17,6 +19,14 @@ const Toolbox = () => {
     const handleLogout = async () => {
         await logOut(currentUser);
         navigate("/", { replace: true });
+    }
+
+    const handleDelete = async () => {
+        const db_response = await deleteUserData(auth);
+        if (db_response) return toast.error(`Failed to delete ${db_response}`)
+        const response = await deleteAccount(auth);
+        if (response) return toast.error(`Failed to delete ${response}`);
+        navigate("/");
     }
 
     const ITEM_HEIGHT = 50;
@@ -61,8 +71,8 @@ const Toolbox = () => {
                 <MenuItem onClick={handleClose}>
                     <Avatar alt="Remy Sharp" src={currentUser?.currentUser?.photoURL} referrerPolicy="no-referrer" />
                 </MenuItem>
-                <MenuItem onClick={handleClose}>{currentUser?.currentUser?.displayName}</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>{currentUser?.currentUser?.displayName || "Anonymous"}</MenuItem>
+                <MenuItem onClick={handleDelete} style={{ color: "red" }}>Delete Account</MenuItem>
                 <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
             </Menu>
         </div>

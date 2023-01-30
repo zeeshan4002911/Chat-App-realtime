@@ -1,5 +1,6 @@
 import { signInWithPopup, signOut, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { writeUserData } from "./IO";
+import { deleteUser } from "firebase/auth";
 
 // FOR LOGIN:
 const signIn = async (auth, type, email = undefined, password = undefined) => {
@@ -56,7 +57,6 @@ const signUp = async (auth, email, password, name) => {
             // Signed in 
             let user = userCredential.user;
             // ...
-            user.auth.displayName = name; // Testing pending
             writeUserData(user.auth);
             return user;
         })
@@ -79,4 +79,15 @@ const logOut = async (auth) => {
         console.log("ERROR 4", error);
     });
 }
-export { signIn, logOut, signUp }
+
+const deleteAccount = async (auth) => {
+    return await deleteUser(auth.currentUser).then(() => {
+        // User deleted.
+    }).catch((error) => {
+        // An error ocurred
+        console.log("ERROR 5", error);
+        return error;
+    });
+}
+
+export { signIn, logOut, signUp, deleteAccount }

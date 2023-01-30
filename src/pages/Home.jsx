@@ -23,6 +23,7 @@ export default function Home() {
         (() => {
             // To Avoid getting auth as null on reload
             auth.onAuthStateChanged(async (user) => {
+                if (!user) return;
                 const users = await readFriendData(user.auth);
                 setFriendList(users);
             })
@@ -62,10 +63,19 @@ export default function Home() {
         (async () => {
             // Need to implement logic here for two way handshake friend request/accept feature
 
-            const response = await writeFriendData(auth, match_user);
-            const response2 = await writeFriendData(match_user, auth); 
-            if (response === "exists") return toast.info(`${match_user.email} is already your friend`);
-            else if (response === "success") { setClickedAddFriend(false); toast.success(`${match_user.email} is now your friend`) }
+            const response = await writeFriendData(auth.currentUser, match_user);
+            const response2 = await writeFriendData(match_user, {
+                uid: auth.currentUser.uid,
+                name: auth.currentUser.displayName,
+                email_verified: auth.currentUser.emailVerified,
+                email: auth.currentUser.email,
+                profile_picture: auth.currentUser.photoURL,
+            });
+            if (response === "exists" || response2 === "exists") return toast.info(`${match_user.email} is already your friend`);
+            else if (response === "success" && response2 === "success") {
+                setClickedAddFriend(false);
+                return toast.success(`${match_user.email} is now your friend`)
+            }
             else return toast.error(`Unable to connect ${response}`);
         })();
     }
@@ -101,7 +111,7 @@ export default function Home() {
                             <Button variant="contained" onClick={handleAddFriend}>Connect</Button>
                         </FriendSearch>
                 }
-                {friendList.length === 0 ? <Empty>Nothing's Here</Empty> : <></>}
+                {friendList.length === 0 && !clickedAddFriend ? <Empty>Nothing's Here</Empty> : <></>}
             </Box>
             <IconButton style={{ position: "absolute", bottom: "1rem", right: "1rem", zIndex: 1 }} onClick={() => setClickedAddFriend(!clickedAddFriend)}>
                 <SupervisedUserCircleRoundedIcon fontSize="large" style={{ color: "black" }} />
