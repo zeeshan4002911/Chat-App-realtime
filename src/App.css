@@ -16,6 +16,9 @@
     background: linear-gradient(white, #ffa8a8, #ff8db7);
     width: 70vw;
     height: 100vh;
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr 10fr 1fr;
 }
 
 .click {
