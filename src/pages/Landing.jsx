@@ -48,15 +48,15 @@ export default function Landing() {
         <div id="landing">
             <PopUp />
             <Main>
-                <Typography variant="h1">Welcome</Typography>
-                <Typography variant="h6">&lt; /Chat &gt;</Typography>
+                <Title variant="h1">Welcome</Title>
+                <Typography variant="h6" fontWeight="bold">&lt; /Chat &gt;</Typography>
                 {!isLoginClick ?
                     <Container>
                         <TextField variant="outlined" label="Email" name="email" onKeyUp={(e) => handleInput(e)}></TextField>
                         <TextField variant="outlined" label="Password" name="password" type="password" onKeyUp={(e) => handleInput(e)}></TextField>
-                        <Button variant="contained" onClick={() => handleLogin("EMAIL/PASSWORD", userInput.email, userInput.password)} >Login</Button>
-                        <Button variant="outlined" onClick={() => setIsLoginClick(true)}>Sign up</Button>
-                        <LoginButton onClick={() => handleLogin("GOOGLE_LOGIN")}>Login using Goo< GoogleIcon />le</LoginButton>
+                        <ButtonCustom variant="contained" onClick={() => handleLogin("EMAIL/PASSWORD", userInput.email, userInput.password)} >Login</ButtonCustom>
+                        <ButtonCustom2 variant="outlined" onClick={() => setIsLoginClick(true)}>Sign up</ButtonCustom2>
+                        <ButtonCustom3 onClick={() => handleLogin("GOOGLE_LOGIN")}>Login using Goo< GoogleIcon />le</ButtonCustom3>
                     </Container>
                     :
                     <Container>
@@ -64,15 +64,20 @@ export default function Landing() {
                         <TextField variant="outlined" label="Email" name="email" onKeyUp={(e) => handleInput(e)}></TextField>
                         <TextField variant="outlined" label="Password" name="password" type="password" onKeyUp={(e) => handleInput(e)}></TextField>
                         <TextField variant="outlined" label="Confirm Password" name="confirm_password" type="password" onKeyUp={(e) => handleInput(e)}></TextField>
-                        <Button variant="contained" onClick={handleSignUp}>Sign Up</Button>
-                        <Button variant="outlined" onClick={() => setIsLoginClick(false)}>Login</Button>
-                        <LoginButton onClick={() => handleLogin("GOOGLE_SIGNUP")}>Sign Up using Goo< GoogleIcon />le</LoginButton>
+                        <ButtonCustom variant="contained" onClick={handleSignUp}>Sign Up</ButtonCustom>
+                        <ButtonCustom2 variant="outlined" onClick={() => setIsLoginClick(false)}>Login</ButtonCustom2>
+                        <ButtonCustom3 onClick={() => handleLogin("GOOGLE_SIGNUP")}>Sign Up using Goo< GoogleIcon />le</ButtonCustom3>
                     </Container>
                 }
             </Main>
         </div>
     )
 }
+
+const Title = styled(Typography)`
+    color: rgba(255, 73, 73, 0.3);
+    font-size: 58px;
+`;
 
 const Main = styled(Box)`
     display: flex;
@@ -81,12 +86,6 @@ const Main = styled(Box)`
     height: 100vh;
     width: 100vw;
     flex-direction: column;
-`
-
-const LoginButton = styled(Button)`
-    &:hover {
-        border-radius: 5px;
-}
 `;
 
 const Container = styled(Box)`
@@ -95,4 +94,26 @@ const Container = styled(Box)`
     & > div, & > button {
         margin: 1rem 0;
     }
+`;
+
+const ButtonCustom = styled(Button)`
+    color: white;
+    background-color: #e56a6a; 
+    &:hover {
+        background-color: #f18f8f;
+    }
+`;
+
+const ButtonCustom2 = styled(Button)`
+    color: white;
+    background-color: #f18f8f;
+    border-color: #f18f8f;
+    &:hover {
+        background-color: #f18f8f;
+        border-color: #f18f8f;
+    }
+`;
+
+const ButtonCustom3 = styled(Button)`
+    color: black;
 `;
