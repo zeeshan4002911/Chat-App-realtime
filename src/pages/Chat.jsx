@@ -22,7 +22,8 @@ const Chat = () => {
     
     useEffect(() => {
         window.onresize = () => {
-            window.location.reload();
+            const width = window.innerWidth || document.documentElement.clientWidth || document.body.innerWidth;
+            if (width >= 500 ) window.location.reload();
         }
     }, [navigate]);
     
