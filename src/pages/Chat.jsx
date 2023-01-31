@@ -20,6 +20,8 @@ const Chat = () => {
     const data = location?.state?.friend_data;
     const user_uid = window.localStorage.getItem("chat_uid");
     const [fetchedMessages, setFetchedMessages] = useState([]);
+    const [mediaURL, setMediaURL] = useState("");
+    const [mediaType, setMediaType] = useState("");
 
 
     useEffect(() => {
@@ -47,7 +49,7 @@ const Chat = () => {
 
     const handleMessageSent = async () => {
         const message_input = document.getElementById("typing").value;
-        if (!message_input) return;
+        if (!message_input && mediaURL === "") return;
         document.getElementById("typing").value = "";
         if (auth.currentUser?.uid && data.uid) {
             const current_time = new Date().toLocaleString();
@@ -57,7 +59,11 @@ const Chat = () => {
                 sender_email: auth.currentUser.email,
                 content: message_input,
                 time: current_time,
+                media_url: mediaURL,
+                media_type: mediaType
             }
+            setMediaURL("");
+            setMediaType("");
             const response = await writeMessageData(auth.currentUser.uid, data.uid, message);
             if (response !== "success") {
                 toast.error(`Unable to send message ${response}`);
@@ -65,6 +71,26 @@ const Chat = () => {
         } else {
             toast.error("Unable to Authenticate")
         }
+    }
+
+    const myWidget = window.cloudinary.createUploadWidget(
+        {
+            cloudName: "dslra7oy9",
+            uploadPreset: "cyteebxa",
+            folder: "Chat_App",
+            maxImageFileSize: 10000000,
+            multiple: false
+        },
+        (error, result) => {
+            if (!error && result && result.event === "success") {
+                setMediaURL(result.info.secure_url);
+                setMediaType(result.info.resource_type);
+            }
+        }
+    );
+
+    const handleImageSent = () => {
+        myWidget.open();
     }
 
     return (
@@ -88,7 +114,7 @@ const Chat = () => {
                         <div ref={messagesEndRef} > </div>
                     </Main>
                     <Footer>
-                        <Button><AddCircleRoundedIcon style={{ color: "#fff" }} fontSize="large" /></Button>
+                        <Button onClick={handleImageSent}><AddCircleRoundedIcon style={{ color: "#fff" }} fontSize="large" /></Button>
                         <OutlinedInput name="typing" type="text" id="typing" placeholder="Message" />
                         <Button onClick={handleMessageSent} ><Send style={{ color: "#fff" }} fontSize="large" /></Button>
                     </Footer>
