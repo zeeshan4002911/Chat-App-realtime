@@ -19,6 +19,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    background: url(/public/cat-bg.png) no-repeat center center;
+    background-size: 60vh;
 }
 
 .click {
