@@ -85,7 +85,7 @@ export default function Home() {
     return (
         <div id="home">
             <PopUp />
-            <Box style={{ borderBottom: "1px solid gray", position: "sticky", top: 0 }}>
+            <Box style={{ borderBottom: "1px solid gray" }}>
                 <Header>
                     <IconButton className="click" variant="contained" size="small" onClick={() => navigate("/")}>
                         <ArrowBackIosRoundedIcon />
@@ -100,7 +100,7 @@ export default function Home() {
                     <TextField id="search" variant="standard" placeholder="search...." />
                 </Box>
             </Box>
-            <Box>
+            <Main>
                 {
                     !clickedAddFriend ?
                         friendList.map(obj => {
@@ -114,7 +114,7 @@ export default function Home() {
                         </FriendSearch>
                 }
                 {friendList.length === 0 && !clickedAddFriend ? <Empty>Nothing's Here</Empty> : <></>}
-            </Box>
+            </Main>
             <IconButton style={{ position: "absolute", bottom: "3rem", right: "1rem", zIndex: 1 }} onClick={() => setClickedAddFriend(!clickedAddFriend)}>
                 <SupervisedUserCircleRoundedIcon fontSize="large" style={{ color: "black" }} />
             </IconButton>
@@ -148,4 +148,12 @@ const Empty = styled(Box)`
     text-align: center;
     color: gray;
     padding: 1rem;
+`
+
+const Main = styled(Box)`
+    padding: 0.5rem 1rem;
+    height: 80%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
 `

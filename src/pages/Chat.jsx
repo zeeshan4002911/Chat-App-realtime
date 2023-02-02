@@ -112,7 +112,7 @@ const Chat = () => {
                                 <ChatCard key={msg_obj.time} data={msg_obj} user_uid={user_uid} />
                             ))
                         }
-                        <ExpandCircleDownIcon style={{ color: "white" }} />
+                        <ExpandCircleDownIcon style={{ color: "white", position: "absolute", bottom: "6rem", left: "1rem", zIndex: 1 }} onClick={() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })} />
                         <div ref={messagesEndRef} style={{ float: "left", clear: "both" }}> </div>
                     </Main>
                     <Footer>
@@ -139,6 +139,7 @@ const Header = styled(Box)`
 
 const Footer = styled(Box)`
     padding: .5rem;
+    padding-bottom: 6%;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 10fr 1fr;
