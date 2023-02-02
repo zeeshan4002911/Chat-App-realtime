@@ -152,8 +152,5 @@ const Empty = styled(Box)`
 
 const Main = styled(Box)`
     padding: 0.5rem 1rem;
-    height: 80%;
     overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
 `
