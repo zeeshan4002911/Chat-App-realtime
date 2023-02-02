@@ -18,7 +18,7 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 // ...
                 console.log("Google tokken:", token);
                 writeUserData(user.auth);
-                return user;
+                return ["success", user];
             }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;
@@ -29,6 +29,7 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 // ...
                 console.log("ERROR 1", errorCode, errorMessage, email, credential);
+                return ["failed", errorMessage];
             });
     } else if (type === "EMAIL/PASSWORD") {
 
@@ -39,12 +40,13 @@ const signIn = async (auth, type, email = undefined, password = undefined) => {
                 const user = userCredential.user;
                 // ...
                 writeUserData(user.auth);
-                return user;
+                return ["success", user];
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log("ERROR 2", errorCode, errorMessage);
+                return ["failed", errorMessage];
             });
     }
 }
@@ -58,13 +60,14 @@ const signUp = async (auth, email, password, name) => {
             let user = userCredential.user;
             // ...
             writeUserData(user.auth);
-            return user;
+            return ["success", user];
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             // ..
             console.log("ERROR 3", errorCode, errorMessage);
+            return ["failed", errorMessage];
         });
 }
 
@@ -73,10 +76,10 @@ const logOut = async (auth) => {
     return await signOut(auth).then(() => {
         // Sign-out successful.
         auth.signOut();
-        console.log(auth)
     }).catch((error) => {
         // An error happened.
         console.log("ERROR 4", error);
+        return error;
     });
 }
 

@@ -24,8 +24,8 @@ export default function Landing() {
 
     const handleLogin = async (type, email, password) => {
         if (auth.currentUser === null) {
-            const user = await signIn(auth, type, email, password);
-            if (!user) return toast.error("Unable to connect with firebase");
+            const response = await signIn(auth, type, email, password);
+            if (response[0] === 'failed') return toast.error(`Unable to connect with firebase ${response[1]}`);
         }
         navigate("/home", { state: { friend_data: null } });
     }
@@ -37,8 +37,8 @@ export default function Landing() {
         }
         const password = userInput.password;
         const name = userInput.name;
-        const user = await signUp(auth, email, password, name);
-        if (!user) return toast.error("Unable to connect with firebase");
+        const response = await signUp(auth, email, password, name);
+        if (response[0] === 'failed') return toast.error(`Unable to connect with firebase ${response[1]}`);
         toast.success("Successfully registered");
         await logOut(auth);
         setIsLoginClick(false);

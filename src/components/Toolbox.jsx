@@ -13,8 +13,11 @@ const Toolbox = () => {
     const [currentUser, setCurrentUser] = useState(auth);
 
     useEffect(() => {
-        setCurrentUser(auth);
-    }, [auth])
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) return;
+            setCurrentUser(user.auth);
+        })
+    }, [])
 
     const handleLogout = async () => {
         await logOut(currentUser);

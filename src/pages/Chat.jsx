@@ -11,6 +11,7 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { toast } from "react-toastify";
 import PopUp from "../components/PopUp";
 import ChatCard from "../components/ChatCard";
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 
 const Chat = () => {
@@ -75,7 +76,7 @@ const Chat = () => {
 
     const myWidget = window.cloudinary.createUploadWidget(
         {
-            cloudName: "dslra7oy9",
+            cloudName: process.env.REACT_APP_cloudName,
             uploadPreset: "cyteebxa",
             folder: "Chat_App",
             maxImageFileSize: 10000000,
@@ -111,7 +112,8 @@ const Chat = () => {
                                 <ChatCard key={msg_obj.time} data={msg_obj} user_uid={user_uid} />
                             ))
                         }
-                        <div ref={messagesEndRef} > </div>
+                        <ExpandCircleDownIcon style={{ color: "white" }} />
+                        <div ref={messagesEndRef} style={{ float: "left", clear: "both" }}> </div>
                     </Main>
                     <Footer>
                         <Button onClick={handleImageSent}><AddCircleRoundedIcon style={{ color: "#fff" }} fontSize="large" /></Button>
